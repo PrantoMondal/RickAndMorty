@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty/features/home/all_cast.dart';
+import 'package:rick_and_morty/features/bottomNav/bottom_nav.dart';
 
 import 'features/splash_screen.dart';
 
@@ -21,7 +22,7 @@ class MyApp extends StatelessWidget {
       initialRoute: SplashScreen.routeName,
       routes: {
         SplashScreen.routeName: (_) => const SplashScreen(),
-        AllCast.routeName: (_) => const AllCast(),
+        BottomNav.routeName: (_) => const BottomNav(),
       },
     );
   }

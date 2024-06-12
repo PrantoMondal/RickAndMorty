@@ -6,4 +6,9 @@ class RnMTextStyles {
     fontFamily: 'PlusJakartaSans',
     fontWeight: FontWeight.w400,
   );
+  static TextStyle plusJakartaSans_600_22 = const TextStyle(
+    fontSize: 22,
+    fontFamily: 'PlusJakartaSans',
+    fontWeight: FontWeight.w600,
+  );
 }
