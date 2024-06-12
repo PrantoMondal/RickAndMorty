@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rick_and_morty/features/details/cast_screen.dart';
 import 'package:rick_and_morty/features/home/all_cast.dart';
 import 'package:rick_and_morty/utils/colors.dart';
-import 'package:rick_and_morty/utils/screen_size.dart';
 import 'cubit/bottom_nav_cubit.dart';
 
 class BottomNav extends StatelessWidget {
@@ -49,7 +49,7 @@ class BottomNav extends StatelessWidget {
                 index: selectedIndex,
                 children: const <Widget>[
                   AllCast(),
-                  Center(child: Text('Message Page')),
+                  CastScreen(),
                 ],
               ),
             ),
