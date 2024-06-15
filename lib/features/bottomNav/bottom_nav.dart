@@ -49,7 +49,9 @@ class BottomNav extends StatelessWidget {
                 index: selectedIndex,
                 children: const <Widget>[
                   AllCast(),
-                  CastScreen(),
+                  CastScreen(
+                    id: "1",
+                  ),
                 ],
               ),
             ),

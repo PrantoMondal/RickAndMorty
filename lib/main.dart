@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:rick_and_morty/features/details/bloc/cast_details_bloc.dart';
 import 'package:rick_and_morty/features/details/cast_screen.dart';
 import 'package:rick_and_morty/features/home/all_cast.dart';
 import 'package:rick_and_morty/features/bottomNav/bottom_nav.dart';
@@ -20,6 +21,10 @@ class MyApp extends StatelessWidget {
         BlocProvider<AllCastBloc>(
           create: (context) => AllCastBloc()..add(AllCastInitialFetchEvent(1)),
         ),
+        BlocProvider<CastDetailsBloc>(
+          create: (context) =>
+              CastDetailsBloc()..add(CastDetailsInitialFetchEvent("3")),
+        ),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -32,7 +37,9 @@ class MyApp extends StatelessWidget {
         routes: {
           SplashScreen.routeName: (_) => const SplashScreen(),
           BottomNav.routeName: (_) => const BottomNav(),
-          CastScreen.routeName: (_) => const CastScreen(),
+          CastScreen.routeName: (_) => const CastScreen(
+                id: '1',
+              ),
         },
       ),
     );

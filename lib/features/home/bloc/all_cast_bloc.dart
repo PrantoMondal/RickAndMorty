@@ -14,7 +14,7 @@ class AllCastBloc extends Bloc<AllCastEvent, AllCastState> {
   }
 }
 
-FutureOr<void> allCastInitialFetchEvent(
+Future<void> allCastInitialFetchEvent(
     AllCastInitialFetchEvent event, Emitter<AllCastState> emit) async {
   final dio = Dio();
   AllCastModel allCastModel;
@@ -32,7 +32,7 @@ FutureOr<void> allCastInitialFetchEvent(
       }
       '''
     });
-    print("_-_-_-_-_-_-_-_-_-_-_-");
+    print("_-_-_-_All Cast_-_-_-_-");
     var data = response.data['data'];
     allCastModel = AllCastModel.fromJson(data);
 

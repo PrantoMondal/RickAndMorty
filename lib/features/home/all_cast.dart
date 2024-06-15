@@ -111,8 +111,15 @@ class _AllCastState extends State<AllCast> {
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
-                              Navigator.pushNamed(
-                                  context, CastScreen.routeName);
+                              // Navigator.pushNamed(
+                              //     context, CastScreen.routeName,arguments: successState.allCastModel.results[index].id);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => CastScreen(
+                                        id: successState
+                                            .allCastModel.results[index].id),
+                                  ));
                             },
                             child: CustomPaint(
                               painter: DiagonalCutPainter(),
