@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:rick_and_morty/features/details/cast_screen.dart';
+import 'package:rick_and_morty/features/home/bloc/all_cast_bloc.dart';
 import 'package:rick_and_morty/utils/colors.dart';
 import 'package:rick_and_morty/utils/diagonal_cut_painter.dart';
 import 'package:rick_and_morty/utils/text_styles.dart';
@@ -7,10 +8,24 @@ import 'package:rick_and_morty/utils/text_styles.dart';
 import '../../utils/custom_app_bar.dart';
 import '../../utils/screen_size.dart';
 
-class AllCast extends StatelessWidget {
+class AllCast extends StatefulWidget {
   static const String routeName = '/home';
 
   const AllCast({super.key});
+
+  @override
+  State<AllCast> createState() => _AllCastState();
+}
+
+class _AllCastState extends State<AllCast> {
+  final AllCastBloc allCastBloc = AllCastBloc();
+
+  @override
+  void initState() {
+    allCastBloc.add(AllCastInitialFetchEvent());
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

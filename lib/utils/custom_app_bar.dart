@@ -18,7 +18,9 @@ class CustomAppBar extends StatelessWidget {
             children: [
               showBackButton == true
                   ? GestureDetector(
-                      onTap: () {},
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
                       child: const SizedBox(
                         width: 30,
                         child: Icon(
