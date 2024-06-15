@@ -22,7 +22,7 @@ FutureOr<void> allCastInitialFetchEvent(
     var response = await dio.post("https://rickandmortyapi.com/graphql", data: {
       'query': '''
       {
-        characters(page: 1) {
+        characters(page: ${event.pageNumber}) {
           results{
             id
             name

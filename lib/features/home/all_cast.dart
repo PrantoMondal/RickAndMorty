@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rick_and_morty/features/details/cast_screen.dart';
 import 'package:rick_and_morty/features/home/bloc/all_cast_bloc.dart';
 import 'package:rick_and_morty/utils/colors.dart';
@@ -19,12 +20,34 @@ class AllCast extends StatefulWidget {
 
 class _AllCastState extends State<AllCast> {
   final AllCastBloc allCastBloc = AllCastBloc();
+  final ScrollController _scrollController = ScrollController();
+  int currentPage = 1;
 
   @override
   void initState() {
-    allCastBloc.add(AllCastInitialFetchEvent());
+    allCastBloc.add(AllCastInitialFetchEvent(currentPage));
     // TODO: implement initState
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        _fetchMoreCharacters();
+      }
+    });
     super.initState();
+  }
+
+  void _fetchMoreCharacters() {
+    currentPage++;
+
+    allCastBloc.add(AllCastInitialFetchEvent(currentPage));
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    allCastBloc.close();
+    // TODO: implement dispose
+    super.dispose();
   }
 
   @override
@@ -60,51 +83,78 @@ class _AllCastState extends State<AllCast> {
             const SizedBox(
               height: 20,
             ),
-            Expanded(
-              child: GridView.builder(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                itemCount: 20,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  childAspectRatio: 1,
-                  crossAxisSpacing: 15,
-                  mainAxisSpacing: 15,
-                ),
-                itemBuilder: (context, index) {
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.pushNamed(context, CastScreen.routeName);
-                    },
-                    child: CustomPaint(
-                      painter: DiagonalCutPainter(),
-                      child: Padding(
-                        padding: const EdgeInsets.all(10.0),
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Image.asset(
-                              'assets/images/rick.png',
-                              height: screenHeight(context, 0.15),
-                              width: screenWidth(context, 0.4),
-                            ),
-                            const SizedBox(
-                              height: 10,
-                            ),
-                            Text(
-                              "Rick Sanchez",
-                              style: RnMTextStyles.plusJakartaSans_600_22
-                                  .copyWith(
-                                      fontSize: 10,
-                                      color: RnMColors.whiteColor),
-                            )
-                          ],
+            BlocBuilder<AllCastBloc, AllCastState>(
+              builder: (context, state) {
+                switch (state.runtimeType) {
+                  case const (AllCastInitial):
+                    return const Expanded(
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.blue,
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
+                    );
+                  case const (AllCastFetchSuccessfulState):
+                    final successState = state as AllCastFetchSuccessfulState;
+                    return Expanded(
+                      child: GridView.builder(
+                        controller: _scrollController,
+                        padding: const EdgeInsets.symmetric(horizontal: 20),
+                        itemCount: successState.allCastModel.results.length,
+                        gridDelegate:
+                            const SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 2,
+                          childAspectRatio: 1,
+                          crossAxisSpacing: 15,
+                          mainAxisSpacing: 15,
+                        ),
+                        itemBuilder: (context, index) {
+                          return GestureDetector(
+                            onTap: () {
+                              Navigator.pushNamed(
+                                  context, CastScreen.routeName);
+                            },
+                            child: CustomPaint(
+                              painter: DiagonalCutPainter(),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 14.0, vertical: 10),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Image.network(
+                                      successState
+                                          .allCastModel.results[index].image,
+                                      height: screenHeight(context, 0.15),
+                                      width: screenWidth(context, 0.4),
+                                      fit: BoxFit.fill,
+                                    ),
+                                    const SizedBox(
+                                      height: 10,
+                                    ),
+                                    Text(
+                                      successState
+                                          .allCastModel.results[index].name,
+                                      style: RnMTextStyles
+                                          .plusJakartaSans_600_22
+                                          .copyWith(
+                                              fontSize: 10,
+                                              color: RnMColors.whiteColor),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    );
+                  default:
+                    const CircularProgressIndicator();
+                }
+                return const CircularProgressIndicator();
+              },
             )
           ],
         ),
