@@ -83,84 +83,98 @@ class _AllCastState extends State<AllCast> {
             const SizedBox(
               height: 20,
             ),
-            BlocBuilder<AllCastBloc, AllCastState>(
+            BlocConsumer<AllCastBloc, AllCastState>(
+              bloc: allCastBloc,
+              buildWhen: (prev, cur) => cur is AllCastActionState,
+              listenWhen: (prev, cur) => cur is! AllCastActionState,
+              listener: (context, state) {
+                // TODO: implement listener
+              },
               builder: (context, state) {
-                switch (state.runtimeType) {
-                  case const (AllCastInitial):
-                    return const Expanded(
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          color: Colors.blue,
-                        ),
-                      ),
-                    );
-                  case const (AllCastFetchSuccessfulState):
-                    final successState = state as AllCastFetchSuccessfulState;
-                    return Expanded(
-                      child: GridView.builder(
-                        controller: _scrollController,
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        itemCount: successState.allCastModel.results.length,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          childAspectRatio: 1,
-                          crossAxisSpacing: 15,
-                          mainAxisSpacing: 15,
-                        ),
-                        itemBuilder: (context, index) {
-                          return GestureDetector(
-                            onTap: () {
-                              // Navigator.pushNamed(
-                              //     context, CastScreen.routeName,arguments: successState.allCastModel.results[index].id);
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => CastScreen(
-                                        id: successState
-                                            .allCastModel.results[index].id),
-                                  ));
-                            },
-                            child: CustomPaint(
-                              painter: DiagonalCutPainter(),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 14.0, vertical: 10),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Image.network(
-                                      successState
-                                          .allCastModel.results[index].image,
-                                      height: screenHeight(context, 0.15),
-                                      width: screenWidth(context, 0.4),
-                                      fit: BoxFit.fill,
-                                    ),
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      successState
-                                          .allCastModel.results[index].name,
-                                      style: RnMTextStyles
-                                          .plusJakartaSans_600_22
-                                          .copyWith(
-                                              fontSize: 10,
-                                              color: RnMColors.whiteColor),
-                                    )
-                                  ],
-                                ),
-                              ),
+                return BlocBuilder<AllCastBloc, AllCastState>(
+                  builder: (context, state) {
+                    switch (state.runtimeType) {
+                      case const (AllCastInitial):
+                        return const Expanded(
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.blue,
                             ),
-                          );
-                        },
-                      ),
-                    );
-                  default:
-                    const CircularProgressIndicator();
-                }
-                return const CircularProgressIndicator();
+                          ),
+                        );
+                      case const (AllCastFetchSuccessfulState):
+                        final successState =
+                            state as AllCastFetchSuccessfulState;
+                        return Expanded(
+                          child: GridView.builder(
+                            controller: _scrollController,
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            itemCount: successState.allCastModel.results.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              childAspectRatio: 1,
+                              crossAxisSpacing: 15,
+                              mainAxisSpacing: 15,
+                            ),
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  // Navigator.pushNamed(
+                                  //     context, CastScreen.routeName,arguments: successState.allCastModel.results[index].id);
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => CastScreen(
+                                            isShowingBack: true,
+                                            id: successState.allCastModel
+                                                .results[index].id),
+                                      ));
+                                },
+                                child: CustomPaint(
+                                  painter: DiagonalCutPainter(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 14.0, vertical: 10),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Image.network(
+                                          successState.allCastModel
+                                              .results[index].image,
+                                          height: screenHeight(context, 0.15),
+                                          width: screenWidth(context, 0.4),
+                                          fit: BoxFit.fill,
+                                        ),
+                                        const SizedBox(
+                                          height: 10,
+                                        ),
+                                        Text(
+                                          successState
+                                              .allCastModel.results[index].name,
+                                          style: RnMTextStyles
+                                              .plusJakartaSans_600_22
+                                              .copyWith(
+                                                  fontSize: 10,
+                                                  color: RnMColors.whiteColor),
+                                        )
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      default:
+                        const CircularProgressIndicator();
+                    }
+                    return const CircularProgressIndicator();
+                  },
+                );
               },
             )
           ],

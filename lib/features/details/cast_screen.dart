@@ -10,9 +10,10 @@ import '../../utils/screen_size.dart';
 
 class CastScreen extends StatefulWidget {
   final String id;
+  final bool? isShowingBack;
   static const String routeName = '/cast';
 
-  const CastScreen({super.key, required this.id});
+  const CastScreen({super.key, required this.id, this.isShowingBack});
 
   @override
   State<CastScreen> createState() => _CastScreenState();
@@ -44,8 +45,8 @@ class _CastScreenState extends State<CastScreen> {
         ),
         child: Column(
           children: [
-            const CustomAppBar(
-              showBackButton: true,
+            CustomAppBar(
+              showBackButton: widget.isShowingBack ?? false,
             ),
             BlocConsumer<CastDetailsBloc, CastDetailsState>(
                 bloc: castDetailsBloc,
@@ -222,11 +223,16 @@ class _CastScreenState extends State<CastScreen> {
         const SizedBox(
           width: 10,
         ),
-        Text(
-          text,
-          style: RnMTextStyles.plusJakartaSans_400_14.copyWith(
-            fontSize: 17,
-            color: RnMColors.whiteColor,
+        SizedBox(
+          width: screenWidth(context, 1) - 110,
+          child: Text(
+            text,
+            softWrap: false,
+            style: RnMTextStyles.plusJakartaSans_400_14.copyWith(
+              fontSize: 17,
+              color: RnMColors.whiteColor,
+              overflow: TextOverflow.fade,
+            ),
           ),
         ),
       ],
