@@ -21,7 +21,7 @@ class AllCast extends StatefulWidget {
 class _AllCastState extends State<AllCast> {
   final AllCastBloc allCastBloc = AllCastBloc();
   final ScrollController _scrollController = ScrollController();
-  int currentPage = 1;
+  int currentPage = 2;
 
   @override
   void initState() {
@@ -37,9 +37,10 @@ class _AllCastState extends State<AllCast> {
   }
 
   void _fetchMoreCharacters() {
-    currentPage++;
-
-    allCastBloc.add(AllCastInitialFetchEvent(currentPage));
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      context.read<AllCastBloc>().add(AllCastInitialFetchEvent(++currentPage));
+    }
   }
 
   @override
@@ -98,18 +99,19 @@ class _AllCastState extends State<AllCast> {
                         return const Expanded(
                           child: Center(
                             child: CircularProgressIndicator(
-                              color: Colors.blue,
+                              color: RnMColors.secondaryColor,
                             ),
                           ),
                         );
                       case const (AllCastFetchSuccessfulState):
                         final successState =
                             state as AllCastFetchSuccessfulState;
+
                         return Expanded(
                           child: GridView.builder(
                             controller: _scrollController,
                             padding: const EdgeInsets.symmetric(horizontal: 20),
-                            itemCount: successState.allCastModel.results.length,
+                            itemCount: successState.characterSet.length,
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 2,
@@ -127,8 +129,9 @@ class _AllCastState extends State<AllCast> {
                                       MaterialPageRoute(
                                         builder: (context) => CastScreen(
                                             isShowingBack: true,
-                                            id: successState.allCastModel
-                                                .results[index].id),
+                                            id: successState.characterSet
+                                                .toList()[index]
+                                                .id),
                                       ));
                                 },
                                 child: CustomPaint(
@@ -143,8 +146,9 @@ class _AllCastState extends State<AllCast> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Image.network(
-                                          successState.allCastModel
-                                              .results[index].image,
+                                          successState.characterSet
+                                              .toList()[index]
+                                              .image,
                                           height: screenHeight(context, 0.15),
                                           width: screenWidth(context, 0.4),
                                           fit: BoxFit.fill,
@@ -153,8 +157,10 @@ class _AllCastState extends State<AllCast> {
                                           height: 10,
                                         ),
                                         Text(
-                                          successState
-                                              .allCastModel.results[index].name,
+                                          successState.characterSet
+                                              .toList()[index]
+                                              .name,
+                                          maxLines: 1,
                                           style: RnMTextStyles
                                               .plusJakartaSans_600_22
                                               .copyWith(
@@ -168,6 +174,11 @@ class _AllCastState extends State<AllCast> {
                               );
                             },
                           ),
+                        );
+                      case const (AllCastFetchFailureState):
+                        final failState = state as AllCastFetchFailureState;
+                        return Center(
+                          child: Text(failState.error),
                         );
                       default:
                         const CircularProgressIndicator();

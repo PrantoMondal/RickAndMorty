@@ -12,3 +12,9 @@ class CastDetailsFetchSuccessfulState extends CastDetailsState {
 
   CastDetailsFetchSuccessfulState(this.castDetailsModel);
 }
+
+class CastDetailsFetchFailureState extends CastDetailsState {
+  final String error;
+
+  CastDetailsFetchFailureState(this.error);
+}

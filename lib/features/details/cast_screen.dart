@@ -198,6 +198,13 @@ class _CastScreenState extends State<CastScreen> {
                           ),
                         ),
                       );
+                    case CastDetailsFetchFailureState:
+                      final failState = state as CastDetailsFetchFailureState;
+                      return Expanded(
+                        child: Center(
+                          child: Text(failState.error),
+                        ),
+                      );
                     default:
                       const CircularProgressIndicator();
                   }

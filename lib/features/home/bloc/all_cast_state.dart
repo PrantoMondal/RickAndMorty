@@ -8,7 +8,13 @@ class AllCastInitial extends AllCastState {}
 abstract class AllCastActionState extends AllCastState {}
 
 class AllCastFetchSuccessfulState extends AllCastState {
-  final AllCastModel allCastModel;
+  final Set<Character> characterSet;
 
-  AllCastFetchSuccessfulState(this.allCastModel);
+  AllCastFetchSuccessfulState(this.characterSet);
+}
+
+class AllCastFetchFailureState extends AllCastState {
+  final String error;
+
+  AllCastFetchFailureState(this.error);
 }
