@@ -24,7 +24,6 @@ class _CastScreenState extends State<CastScreen> {
 
   @override
   void initState() {
-    print(" called .................");
     castDetailsBloc.add(CastDetailsInitialFetchEvent(widget.id));
     // TODO: implement initState
     super.initState();
