@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider<CastDetailsBloc>(
           create: (context) =>
-              CastDetailsBloc()..add(CastDetailsInitialFetchEvent("3")),
+              CastDetailsBloc()..add(CastDetailsInitialFetchEvent("1")),
         ),
       ],
       child: MaterialApp(

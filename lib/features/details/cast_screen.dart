@@ -59,7 +59,7 @@ class _CastScreenState extends State<CastScreen> {
                       return const Expanded(
                         child: Center(
                           child: CircularProgressIndicator(
-                            color: Colors.blue,
+                            color: RnMColors.secondaryColor,
                           ),
                         ),
                       );

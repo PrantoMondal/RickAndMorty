@@ -21,11 +21,11 @@ class AllCast extends StatefulWidget {
 class _AllCastState extends State<AllCast> {
   final AllCastBloc allCastBloc = AllCastBloc();
   final ScrollController _scrollController = ScrollController();
-  int currentPage = 2;
+  int currentPage = 1;
 
   @override
   void initState() {
-    allCastBloc.add(AllCastInitialFetchEvent(currentPage));
+    // allCastBloc.add(AllCastInitialFetchEvent(currentPage));
     // TODO: implement initState
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
@@ -37,10 +37,7 @@ class _AllCastState extends State<AllCast> {
   }
 
   void _fetchMoreCharacters() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
-      context.read<AllCastBloc>().add(AllCastInitialFetchEvent(++currentPage));
-    }
+    context.read<AllCastBloc>().add(AllCastInitialFetchEvent(++currentPage));
   }
 
   @override
@@ -122,8 +119,6 @@ class _AllCastState extends State<AllCast> {
                             itemBuilder: (context, index) {
                               return GestureDetector(
                                 onTap: () {
-                                  // Navigator.pushNamed(
-                                  //     context, CastScreen.routeName,arguments: successState.allCastModel.results[index].id);
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
