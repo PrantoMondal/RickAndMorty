@@ -19,12 +19,12 @@ class CastScreen extends StatefulWidget {
 }
 
 class _CastScreenState extends State<CastScreen> {
-  final CastDetailsBloc allCastBloc = CastDetailsBloc();
+  final CastDetailsBloc castDetailsBloc = CastDetailsBloc();
 
   @override
   void initState() {
     print(" called .................");
-    allCastBloc.add(CastDetailsInitialFetchEvent(widget.id));
+    castDetailsBloc.add(CastDetailsInitialFetchEvent(widget.id));
     // TODO: implement initState
     super.initState();
   }
@@ -47,146 +47,161 @@ class _CastScreenState extends State<CastScreen> {
             const CustomAppBar(
               showBackButton: true,
             ),
-            BlocBuilder<CastDetailsBloc, CastDetailsState>(
+            BlocConsumer<CastDetailsBloc, CastDetailsState>(
+                bloc: castDetailsBloc,
+                listenWhen: (prev, cur) => cur is CastDetailsActionState,
+                buildWhen: (prev, cur) => cur is! CastDetailsActionState,
+                listener: (context, state) {},
                 builder: (context, state) {
-              switch (state.runtimeType) {
-                case CastDetailsInitial:
-                  return const Expanded(
-                    child: Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.blue,
-                      ),
-                    ),
-                  );
-                case CastDetailsFetchSuccessfulState:
-                  final successState = state as CastDetailsFetchSuccessfulState;
-                  return Expanded(
-                    child: SingleChildScrollView(
-                      child: Padding(
-                        padding: const EdgeInsets.all(20.0),
-                        child: Column(
-                          children: [
-                            Text(
-                              successState.castDetailsModel.name!,
-                              style: RnMTextStyles.plusJakartaSans_600_22
-                                  .copyWith(color: RnMColors.secondaryColor),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            CustomPaint(
-                              painter: BoxShapePainter(),
-                              child: Padding(
-                                padding: const EdgeInsets.all(30),
-                                child: Image.network(
-                                  successState.castDetailsModel.image!,
-                                  height: 160,
-                                  width: 160,
-                                  fit: BoxFit.fill,
-                                ),
-                              ),
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  switch (state.runtimeType) {
+                    case CastDetailsInitial:
+                      return const Expanded(
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.blue,
+                          ),
+                        ),
+                      );
+                    case CastDetailsFetchSuccessfulState:
+                      final successState =
+                          state as CastDetailsFetchSuccessfulState;
+                      return Expanded(
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Column(
                               children: [
-                                buildCustomBox1(
-                                  imageUrl: 'assets/images/icons/heart.png',
-                                  title: "Status",
-                                  subTitle:
-                                      successState.castDetailsModel.status!,
+                                Text(
+                                  successState.castDetailsModel.name!,
+                                  style: RnMTextStyles.plusJakartaSans_600_22
+                                      .copyWith(
+                                          color: RnMColors.secondaryColor),
                                 ),
-                                buildCustomBox1(
-                                  imageUrl: 'assets/images/icons/species.png',
-                                  title: "Species",
-                                  subTitle:
-                                      successState.castDetailsModel.species!,
+                                const SizedBox(
+                                  height: 20,
                                 ),
-                                buildCustomBox1(
-                                  imageUrl: 'assets/images/icons/gender.png',
-                                  title: "Gender",
+                                CustomPaint(
+                                  painter: BoxShapePainter(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(30),
+                                    child: Image.network(
+                                      successState.castDetailsModel.image!,
+                                      height: 160,
+                                      width: 160,
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    buildCustomBox1(
+                                      imageUrl: 'assets/images/icons/heart.png',
+                                      title: "Status",
+                                      subTitle:
+                                          successState.castDetailsModel.status!,
+                                    ),
+                                    buildCustomBox1(
+                                      imageUrl:
+                                          'assets/images/icons/species.png',
+                                      title: "Species",
+                                      subTitle: successState
+                                          .castDetailsModel.species!,
+                                    ),
+                                    buildCustomBox1(
+                                      imageUrl:
+                                          'assets/images/icons/gender.png',
+                                      title: "Gender",
+                                      subTitle:
+                                          successState.castDetailsModel.gender!,
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                buildCustomBox2(
+                                  imageUrl: 'assets/images/icons/earth.png',
+                                  title: "Origin",
                                   subTitle:
-                                      successState.castDetailsModel.gender!,
+                                      successState.castDetailsModel.origin!,
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                buildCustomBox2(
+                                  imageUrl: 'assets/images/icons/location.png',
+                                  title: "Last Known Location",
+                                  subTitle:
+                                      successState.castDetailsModel.location!,
+                                ),
+                                const SizedBox(
+                                  height: 20,
+                                ),
+                                CustomPaint(
+                                  painter: BoxShapePainter(),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 10),
+                                    child: SizedBox(
+                                      width: double.infinity,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Image.asset(
+                                              'assets/images/icons/menu.png'),
+                                          const SizedBox(
+                                            height: 6,
+                                          ),
+                                          Text(
+                                            "Episode(s)",
+                                            style: RnMTextStyles
+                                                .plusJakartaSans_600_22
+                                                .copyWith(
+                                              fontSize: 10,
+                                              color: RnMColors.whiteColor,
+                                            ),
+                                          ),
+                                          const SizedBox(
+                                            height: 8,
+                                          ),
+                                          ListView.builder(
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            shrinkWrap: true,
+                                            padding: EdgeInsets.zero,
+                                            itemCount: successState
+                                                .castDetailsModel
+                                                .episodes!
+                                                .length,
+                                            itemBuilder: (context, index) {
+                                              return buildTextRow(
+                                                  text: successState
+                                                      .castDetailsModel
+                                                      .episodes![index]
+                                                      .name!);
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            buildCustomBox2(
-                              imageUrl: 'assets/images/icons/earth.png',
-                              title: "Origin",
-                              subTitle: successState.castDetailsModel.origin!,
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            buildCustomBox2(
-                              imageUrl: 'assets/images/icons/location.png',
-                              title: "Last Known Location",
-                              subTitle: successState.castDetailsModel.location!,
-                            ),
-                            const SizedBox(
-                              height: 20,
-                            ),
-                            CustomPaint(
-                              painter: BoxShapePainter(),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 15, vertical: 10),
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Image.asset(
-                                          'assets/images/icons/menu.png'),
-                                      const SizedBox(
-                                        height: 6,
-                                      ),
-                                      Text(
-                                        "Episode(s)",
-                                        style: RnMTextStyles
-                                            .plusJakartaSans_600_22
-                                            .copyWith(
-                                          fontSize: 10,
-                                          color: RnMColors.whiteColor,
-                                        ),
-                                      ),
-                                      const SizedBox(
-                                        height: 8,
-                                      ),
-                                      ListView.builder(
-                                        shrinkWrap: true,
-                                        padding: EdgeInsets.zero,
-                                        itemCount: successState
-                                            .castDetailsModel.episodes!.length,
-                                        itemBuilder: (context, index) {
-                                          return buildTextRow(
-                                              text: successState
-                                                  .castDetailsModel
-                                                  .episodes![index]
-                                                  .name!);
-                                        },
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  );
-                default:
-                  const CircularProgressIndicator();
-              }
-              return const SizedBox();
-            })
+                      );
+                    default:
+                      const CircularProgressIndicator();
+                  }
+                  return const SizedBox();
+                })
           ],
         ),
       ),
